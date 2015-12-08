@@ -3,7 +3,9 @@ import model.A;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
@@ -11,11 +13,12 @@ public class Main {
 	private static final String CONFIG_FILE = "hibernate.cfg.xml";
 
 	private SessionFactory createFactory() {
-		AnnotationConfiguration ac = new AnnotationConfiguration();
+		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+		.configure() // configures settings from hibernate.cfg.xml
+		.build();
 
-		ac.configure(CONFIG_FILE);
+		return new MetadataSources( registry ).buildMetadata().buildSessionFactory();
 
-		return ac.buildSessionFactory();
 	}
 
 	public static void main(String[] args) {
